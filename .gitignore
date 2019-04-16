@@ -1,0 +1,4 @@
+__pycharm__/
+.idea/
+*.sqlite3
+config.json

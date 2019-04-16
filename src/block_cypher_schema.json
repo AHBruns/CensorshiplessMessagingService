@@ -1,0 +1,535 @@
+{
+  "schema_name": "block cypher ethereum api",
+  "base_url": "https://api.blockcypher.com/v1/eth",
+  "alt_base_url": "https://api.blockcypher.com/v1/beth",
+  "objects": {
+    "BLOCKCHAIN": {
+      "name": "BLOCKCHAIN",
+      "obj": {
+        "name": "STRING",
+        "height": "INTEGER",
+        "hash": "STRING",
+        "time": "STRING",
+        "latest_url": "STRING",
+        "previous_hash": "STRING",
+        "previous_url": "STRING",
+        "peer_count": "INTEGER",
+        "unconfirmed_count": "INTEGER",
+        "high_gas_price": "INTEGER",
+        "medium_gas_price": "INTEGER",
+        "low_gas_price": "INTEGER",
+        "last_fork_height": "INTEGER_?",
+        "last_fork_hash": "STRING_?"
+      }
+    },
+    "BLOCK": {
+      "name": "BLOCK",
+      "obj": {
+        "hash": "STRING",
+        "height": "INTEGER",
+        "chain": "STRING",
+        "total": "INTEGER",
+        "fees": "INTEGER",
+        "size": "INTEGER",
+        "ver": "INTEGER",
+        "time": "STRING",
+        "received_time": "STRING",
+        "coinbase_addr": "STRING",
+        "relayed_by": "STRING",
+        "nonce": "INTEGER",
+        "n_tx": "INTEGER",
+        "prev_block": "STRING",
+        "mrkl_root": "STRING",
+        "uncles": "STRING_LIST",
+        "txids": "STRING_LIST",
+        "internal_txids": "STRING_LIST",
+        "next_txids": "STRING_?",
+        "next_internal_txids": "STRING_?",
+        "depth": "INTEGER",
+        "prev_block_url": "STRING",
+        "tx_url": "STRING"
+      }
+    },
+    "TX": {
+      "name": "TX",
+      "sub_objs": [
+        {
+          "name": "INPUT",
+          "obj": {
+            "sequence": "INTEGER",
+            "addresses": "STRING_LIST"
+          }
+        },
+        {
+          "name": "OUTPUT",
+          "obj": {
+            "value": "INTEGER",
+            "script": "STRING",
+            "addresses": "STRING_LIST"
+          }
+        }
+      ],
+      "obj": {
+        "block_hash": "STRING_?",
+        "block_height": "INTEGER",
+        "block_index": "INTEGER_?",
+        "hash": "STRING",
+        "addresses": "STRING_LIST",
+        "total": "INTEGER",
+        "fees": "INTEGER",
+        "size": "INTEGER",
+        "gas_used": "INTEGER",
+        "gas_price": "INTEGER",
+        "relayed_by": "STRING",
+        "confirmed": "STRING_?",
+        "received": "STRING",
+        "ver": "INTEGER",
+        "double_spend": "BOOLEAN",
+        "vin_sz": "INTEGER",
+        "vout_sz": "INTEGER",
+        "confirmations": "INTEGER",
+        "confidence": "INTEGER",
+        "inputs": "SUB_OBJ_INPUT_LIST",
+        "outputs": "SUB_OBJ_OUTPUT_LIST",
+        "internal_txids": "STRING_LIST_?",
+        "parent_tx": "STRING_?",
+        "gas_limit": "INTEGER_?",
+        "contract_creation": "BOOLEAN_?",
+        "receive_count": "INTEGER_?",
+        "double_of": "STRING_?",
+        "execution_error": "STRING_?"
+      }
+    },
+    "TXREF": {
+      "name": "TXREF",
+      "obj": {
+        "tx_hash": "STRING",
+        "block_height": "INTEGER",
+        "tx_input_n": "INTEGER",
+        "tx_output_n": "INTEGER",
+        "value": "INTEGER",
+        "ref_balance": "INTEGER_?",
+        "confirmations": "INTEGER",
+        "confirmed": "STRING_?",
+        "double_spend": "BOOLEAN",
+        "double_of": "STRING_?"
+      }
+    },
+    "TXSKELETON": {
+      "name": "TXSKELETON",
+      "obj": {
+        "tx": "META_OBJ_TX",
+        "to_sign": "STRING_LIST",
+        "signatures": "STRING_LIST",
+        "errors": "STRING_LIST_?"
+      }
+    },
+    "ADDRESS": {
+      "name": "ADDRESS",
+      "obj": {
+        "address": "STRING",
+        "total_received": "INTEGER",
+        "total_sent": "INTEGER",
+        "balance": "INTEGER",
+        "unconfirmed_balance": "INTEGER",
+        "final_balance": "INTEGER",
+        "n_tx": "INTEGER",
+        "unconfirmed_n_tx": "INTEGER",
+        "final_n_tx": "INTEGER",
+        "txrefs": "META_OBJ_TXREEF_LIST_?",
+        "hasMore": "BOOLEAN",
+        "tx_url": "STRING_?",
+        "unconfirmed_txrefs": "META_OBJ_TXREEF_LIST_?",
+        "has_more": "BOOLEAN_?"
+      }
+    },
+    "ADDRESSKEYCHAIN": {
+      "name": "ADDRESSKEYCHAIN",
+      "obj": {
+        "private": "STRING",
+        "public": "STRING",
+        "address": "STRING"
+      }
+    },
+    "CONTRACT": {
+      "name": "CONTRACT",
+      "obj": {
+        "solidity": "STRING",
+        "params": "STRING_LIST",
+        "publish": "STRING_LIST",
+        "private": "STRING",
+        "gas_limit": "INTEGER",
+        "value": "INTEGER",
+        "name": "STRING",
+        "bin": "STRING",
+        "abi": "ABI",
+        "ADDRESS": "STRING",
+        "CREATED": "STRING",
+        "creation_tx_hash": "STRING",
+        "results": "STRING_LIST"
+      }
+    },
+    "EVENT": {
+      "name": "EVENT",
+      "obj": {
+        "id": "STRING",
+        "token": "STRING",
+        "url": "STRING_?",
+        "callback_errors": "INTEGER",
+        "address": "STRING_?",
+        "event": "STRING",
+        "filter": "STRING",
+        "confirmations": "INTEGER_?",
+        "hash": "STRING_?"
+      }
+    }
+  },
+  "routes": {
+    "main": {
+      "extension": "/main",
+      "is_return": true,
+      "http": "GET",
+      "return_obj": "BLOCKCHAIN",
+      "info": "general information about the ethereum main chain",
+      "has_routes": true,
+      "routes": {
+        "blocks": {
+          "extension": "/main/blocks",
+          "is_return": false,
+          "has_routes": true,
+          "routes": {
+            "$BLOCK_HASH": {
+              "extension": "/main/blocks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "BLOCK",
+              "info": "info about a block by block hash",
+              "has_routes": false
+            },
+            "$BLOCK_HEIGHT": {
+              "extension": "/main/blocks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "BLOCK",
+              "info": "info about a block by block height",
+              "has_routes": false
+            }
+          }
+        },
+        "addrs": {
+          "extension": "/main/addrs",
+          "is_return": true,
+          "http": "POST",
+          "params": null,
+          "return_obj": "ADDRESSKEYCHAIN",
+          "info": "generate a keypair",
+          "has_routes": true,
+          "routes": {
+            "$ADDRESS": {
+              "extension": "/main/addrs/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "ADDRESS",
+              "info": "info about a specific address",
+              "has_routes": true,
+              "routes": {
+                "balance": {
+                  "extension": "/main/addrs/{}/balance",
+                  "is_return": true,
+                  "http": "GET",
+                  "return_obj": "ADDRESS",
+                  "info": "specific info about the balance of an address",
+                  "has_routes": false
+                }
+              }
+            }
+          }
+        },
+        "txs": {
+          "extensions": "/main/txs",
+          "is_return": true,
+          "http": "GET",
+          "return_obj": "TX_LIST",
+          "info": "all unconfirmed transactions",
+          "has_routes": true,
+          "routes": {
+            "$TXHASH": {
+              "extension": "/main/txs/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "TX",
+              "info": "info on a specific transaction",
+              "has_routes": false
+            },
+            "new": {
+              "extension": "/main/txs/new",
+              "is_return": true,
+              "http": "POST",
+              "params": "TX",
+              "return_obj": "TXSKELETON",
+              "info": "make a new transaction",
+              "has_routes": false
+            },
+            "send": {
+              "extension": "/main/txs/send",
+              "is_return": true,
+              "http": "POST",
+              "params": "TXSKELETON",
+              "return_obj": "TXSKELETION",
+              "info": "broadcast a transaction",
+              "has_routes": false
+            },
+            "decode": {
+              "extension": "/main/txs/decode",
+              "is_return": true,
+              "return_obj": "TX",
+              "http": "POST",
+              "params": "TX_HEX",
+              "info": "decode a hex-encoded tx",
+              "has_routes": false
+            },
+            "push": {
+              "extension": "/main/txs/push",
+              "is_return": true,
+              "http": "POST",
+              "params": "TX_HEX",
+              "return_obj": "TX",
+              "info": "broadcast a hex-encoded tx",
+              "has_routes": false
+            }
+          }
+        },
+        "contracts": {
+          "extension": "/main/contracts",
+          "is_return": true,
+          "http": "POST",
+          "params": "CONTRACT",
+          "return_obj": "CONTRACT_LIST",
+          "info": "deploy contract",
+          "has_routes": true,
+          "routes": {
+            "$ADDRESS": {
+              "extension": "/main/contracts/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "CONTRACT",
+              "info": "info about the contract at the specified address",
+              "has_routes": true,
+              "routes": {
+                "$METHOD": {
+                  "extension": "/main/contracts/{}/{}",
+                  "is_return": true,
+                  "http": "POST",
+                  "params": "CONTRACT",
+                  "return_obj": "CONTRACT",
+                  "info": "call a deployed contract's method",
+                  "has_routes": false
+                }
+              }
+            }
+          }
+        },
+        "hooks": {
+          "extension": "/main/hooks",
+          "is_return": true,
+          "http": "POST",
+          "params": "EVENT",
+          "return_obj": "EVENT",
+          "info": "create an event web-hook",
+          "has_routes": true,
+          "routes": {
+            "$WEBHOOKID_GET": {
+              "extension": "/main/hooks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "EVENT",
+              "info": "get a resource based on id",
+              "has_routes": false
+            },
+            "$WEBHOOKID_DELETE": {
+              "extension": "/main/hooks/{}",
+              "is_return": true,
+              "http": "DELETE",
+              "return_obj": "EVENT",
+              "info": "delete a resource based on id",
+              "has_routes": false
+            }
+          }
+        }
+      }
+    },
+    "test": {
+      "extension": "/test",
+      "is_return": true,
+      "http": "GET",
+      "return_obj": "BLOCKCHAIN",
+      "info": "general information about the ethereum main chain",
+      "has_routes": true,
+      "routes": {
+        "blocks": {
+          "extension": "/test/blocks",
+          "is_return": false,
+          "has_routes": true,
+          "routes": {
+            "$BLOCK_HASH": {
+              "extension": "/test/blocks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "BLOCK",
+              "info": "info about a block by block hash",
+              "has_routes": false
+            },
+            "$BLOCK_HEIGHT": {
+              "extension": "/test/blocks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "BLOCK",
+              "info": "info about a block by block height",
+              "has_routes": false
+            }
+          }
+        },
+        "addrs": {
+          "extension": "/test/addrs",
+          "is_return": true,
+          "http": "POST",
+          "params": null,
+          "return_obj": "ADDRESSKEYCHAIN",
+          "info": "generate a keypair",
+          "has_routes": true,
+          "routes": {
+            "$ADDRESS": {
+              "extension": "/test/addrs/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "ADDRESS",
+              "info": "info about a specific address",
+              "has_routes": true,
+              "routes": {
+                "balance": {
+                  "extension": "/test/addrs/{}/balance",
+                  "is_return": true,
+                  "http": "GET",
+                  "return_obj": "ADDRESS",
+                  "info": "specific info about the balance of an address",
+                  "has_routes": false
+                }
+              }
+            }
+          }
+        },
+        "txs": {
+          "extensions": "/test/txs",
+          "is_return": true,
+          "http": "GET",
+          "return_obj": "TX_LIST",
+          "info": "all unconfirmed transactions",
+          "has_routes": true,
+          "routes": {
+            "$TXHASH": {
+              "extension": "/test/txs/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "TX",
+              "info": "info on a specific transaction",
+              "has_routes": false
+            },
+            "new": {
+              "extension": "/test/txs/new",
+              "is_return": true,
+              "http": "POST",
+              "params": "TX",
+              "return_obj": "TXSKELETON",
+              "info": "make a new transaction",
+              "has_routes": false
+            },
+            "send": {
+              "extension": "/test/txs/send",
+              "is_return": true,
+              "http": "POST",
+              "params": "TXSKELETON",
+              "return_obj": "TXSKELETION",
+              "info": "broadcast a transaction",
+              "has_routes": false
+            },
+            "decode": {
+              "extension": "/test/txs/decode",
+              "is_return": true,
+              "return_obj": "TX",
+              "http": "POST",
+              "params": "TX_HEX",
+              "info": "decode a hex-encoded tx",
+              "has_routes": false
+            },
+            "push": {
+              "extension": "/test/txs/push",
+              "is_return": true,
+              "http": "POST",
+              "params": "TX_HEX",
+              "return_obj": "TX",
+              "info": "broadcast a hex-encoded tx",
+              "has_routes": false
+            }
+          }
+        },
+        "contracts": {
+          "extension": "/test/contracts",
+          "is_return": true,
+          "http": "POST",
+          "params": "CONTRACT",
+          "return_obj": "CONTRACT_LIST",
+          "info": "deploy contract",
+          "has_routes": true,
+          "routes": {
+            "$ADDRESS": {
+              "extension": "/test/contracts/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "CONTRACT",
+              "info": "info about the contract at the specified address",
+              "has_routes": true,
+              "routes": {
+                "$METHOD": {
+                  "extension": "/test/contracts/{}/{}",
+                  "is_return": true,
+                  "http": "POST",
+                  "params": "CONTRACT",
+                  "return_obj": "CONTRACT",
+                  "info": "call a deployed contract's method",
+                  "has_routes": false
+                }
+              }
+            }
+          }
+        },
+        "hooks": {
+          "extension": "/test/hooks",
+          "is_return": true,
+          "http": "POST",
+          "params": "EVENT",
+          "return_obj": "EVENT",
+          "info": "create an event web-hook",
+          "has_routes": true,
+          "routes": {
+            "$WEBHOOKID_GET": {
+              "extension": "/test/hooks/{}",
+              "is_return": true,
+              "http": "GET",
+              "return_obj": "EVENT",
+              "info": "get a resource based on id",
+              "has_routes": false
+            },
+            "$WEBHOOKID_DELETE": {
+              "extension": "/test/hooks/{}",
+              "is_return": true,
+              "http": "DELETE",
+              "return_obj": "EVENT",
+              "info": "delete a resource based on id",
+              "has_routes": false
+            }
+          }
+        }
+      }
+    }
+  }
+}
